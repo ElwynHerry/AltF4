@@ -23,9 +23,7 @@ struct JouerView: View {
 
                 Spacer()
 
-                Button(action: {
-                    // Action for Blind Test Playlist
-                }) {
+                NavigationLink(destination: Jeu_1_View()) {
                     Text("Blind Test Playlist")
                         .font(.title2)
                         .fontWeight(.semibold)
@@ -38,9 +36,7 @@ struct JouerView: View {
                 }
                 .padding(.horizontal, 20)
 
-                Button(action: {
-                    // Action for Quiz Vrai/Faux
-                }) {
+                NavigationLink(destination: Jeu_2_View()) {
                     Text("Quiz Vrai/Faux")
                         .font(.title2)
                         .fontWeight(.semibold)
@@ -53,9 +49,7 @@ struct JouerView: View {
                 }
                 .padding(.horizontal, 20)
 
-                Button(action: {
-                    // Action for Trouve le jeu
-                }) {
+                NavigationLink(destination: Jeu_3_View()) {
                     Text("Trouve le jeu")
                         .font(.title2)
                         .fontWeight(.semibold)
