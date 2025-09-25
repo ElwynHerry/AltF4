@@ -37,10 +37,33 @@ class APIService {
                 completion(.failure(NSError(domain: "No data", code: -1)))
                 return
             }
+
+            // Log the raw API response for debugging
+            if let rawResponse = String(data: data, encoding: .utf8) {
+                print("Raw API Response: \(rawResponse)")
+            }
+
             do {
-                let questions = try JSONDecoder().decode([TrueFalseQuestion].self, from: data)
-                completion(.success(questions))
+                let decoder = JSONDecoder()
+                decoder.keyDecodingStrategy = .convertFromSnakeCase // Handle snake_case keys
+                let response = try decoder.decode(TrueFalseResponse.self, from: data)
+                completion(.success(response.questions))
+            } catch let decodingError as DecodingError {
+                switch decodingError {
+                case .typeMismatch(let type, let context):
+                    print("Type mismatch for type \(type): \(context.debugDescription)")
+                case .valueNotFound(let value, let context):
+                    print("Value not found for value \(value): \(context.debugDescription)")
+                case .keyNotFound(let key, let context):
+                    print("Key not found: \(key.stringValue) - \(context.debugDescription)")
+                case .dataCorrupted(let context):
+                    print("Data corrupted: \(context.debugDescription)")
+                @unknown default:
+                    print("Unknown decoding error: \(decodingError)")
+                }
+                completion(.failure(decodingError))
             } catch {
+                print("Unexpected error: \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }.resume()
@@ -79,7 +102,7 @@ struct TrueFalseQuestion: Codable {
     let image: String
     let question: String
     let answer: Bool
-    let game_name: String
+    let game_name: String? // Made optional to handle missing keys
 }
 
 struct GuessGameQuestion: Codable {
@@ -96,4 +119,8 @@ struct GuessGameHints: Codable {
 // Add a new struct to handle the top-level JSON object
 struct BlindTestResponse: Codable {
     let questions: [BlindTestQuestion]
+}
+
+struct TrueFalseResponse: Codable {
+    let questions: [TrueFalseQuestion]
 }
