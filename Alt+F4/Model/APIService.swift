@@ -2,7 +2,7 @@ import Foundation
 
 class APIService {
     static let shared = APIService()
-    private let baseURL = "https://ton-api-url.com" // Remplace par l'URL de ton backend
+    private let baseURL = "http://localhost:8080" // Mise à jour de l'URL pour pointer vers localhost
 
     // Blind Test Playlist
     func fetchBlindTest(completion: @escaping (Result<[BlindTestQuestion], Error>) -> Void) {
@@ -17,8 +17,8 @@ class APIService {
                 return
             }
             do {
-                let questions = try JSONDecoder().decode([BlindTestQuestion].self, from: data)
-                completion(.success(questions))
+                let response = try JSONDecoder().decode(BlindTestResponse.self, from: data)
+                completion(.success(response.questions))
             } catch {
                 completion(.failure(error))
             }
@@ -91,4 +91,9 @@ struct GuessGameHints: Codable {
     let image: String?
     let released: String?
     let genres: [String]?
+}
+
+// Add a new struct to handle the top-level JSON object
+struct BlindTestResponse: Codable {
+    let questions: [BlindTestQuestion]
 }
