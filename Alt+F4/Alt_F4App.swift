@@ -11,7 +11,7 @@ import SwiftUI
 struct Alt_F4App: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AccueilView()
         }
     }
 }

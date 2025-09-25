@@ -1,11 +1,11 @@
 import SwiftUI
 
-struct ContentView: View {
+struct AccueilView: View {
     var body: some View {
         NavigationStack {
             VStack {
                 // 1. Logo
-                Image("images")
+                Image("images.png")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 150, height: 150)
@@ -62,5 +62,10 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    AccueilView()
 }
+//  AccueilView.swift
+//  Alt+F4
+//
+//  Created by m1 on 25/09/2025.
+//
