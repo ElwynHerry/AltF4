@@ -82,8 +82,10 @@ class APIService {
                 return
             }
             do {
-                let questions = try JSONDecoder().decode([GuessGameQuestion].self, from: data)
-                completion(.success(questions))
+                let decoder = JSONDecoder()
+                decoder.keyDecodingStrategy = .convertFromSnakeCase
+                let response = try decoder.decode(GuessGameResponse.self, from: data)
+                completion(.success(response.questions))
             } catch {
                 completion(.failure(error))
             }
@@ -105,9 +107,13 @@ struct TrueFalseQuestion: Codable {
     let game_name: String? // Made optional to handle missing keys
 }
 
+struct GuessGameResponse: Codable {
+    let questions: [GuessGameQuestion]
+}
+
 struct GuessGameQuestion: Codable {
     let hints: GuessGameHints
-    let answer: String
+    let correctAnswer: String // Updated to match `correct_answer` key in API response
 }
 
 struct GuessGameHints: Codable {
